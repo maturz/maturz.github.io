@@ -1,0 +1,298 @@
+<html>
+<head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-48335224-2"></script><script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}  gtag('js', new Date()); gtag('config', 'UA-48335224-2');</script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<style>
+		.ui-helper-hidden-accessible {
+			display: none;
+		}
+		.ui-state-focus,.ui-state-hover, .ui-state-highlight, .ui-state-active
+		{
+			color:White;
+			background:blue;
+			outline:none;
+		}
+		.ui-menu {
+			background-color: white;
+			border: 1px solid;
+			max-width: 200px;
+			list-style-type:none
+		}
+		.ui-menu-item {
+			margin-left: -30px;
+		}
+	</style> 
+</head>
+<body>
+<button onClick="$('.classInput').val(''); $('.levelButton').html('*');"> Clear all</button>
+	<input id="xpnow" type="text" placeholder="xp" onKeyUp="calculateXp();" style="width: 60px;"> / <input id="xpneed" type="text" placeholder="needed" onKeyUp="calculateXp();" style="width: 60px;"><span id="xpout"></span><span style="color: gray;font-size: 10pt;">&nbsp;DACSynergyTracker 1.0</span><br>
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button>&nbsp;
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button><br>
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button>&nbsp;
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button><br>
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button>&nbsp;
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button><br>
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button>&nbsp;
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button><br>
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button>&nbsp;
+<button class="levelButton" style="width: 35px;" onClick="this.innerHTML = this.innerHTML.length >= 3 ? '*' : this.innerHTML+'*';">*</button><input placeholder="Select Unit" type="text" onclick="this.select();" class="classInput"><button style="width: 35px;" onClick="$(this).prev().val('');$(this).prev().prev().html('*');"> X </button><br>
+
+<div id="synergyOutput"></div>
+<script>
+var unitArray ={
+"Axe":{"r":["Orc"],"c":"Warrior"},
+"Enchantress":{"r":["Beast"],"c":"Druid"},
+"Ogre Magi":{"r":["Ogre"],"c":"Mage"},
+"Tusk":{"r":["Beast"],"c":"Warrior"},
+"Drow Ranger":{"r":["Undead"],"c":"Hunter"},
+"Bounty Hunter":{"r":["Goblin"],"c":"Assassin"},
+"Clockwerk":{"r":["Goblin"],"c":"Mech"},
+"Shadow Shaman":{"r":["Troll"],"c":"Shaman"},
+"Bat Rider":{"r":["Troll"],"c":"Knight"},
+"Tinker":{"r":["Goblin"],"c":"Mech"},
+"Anti Mage":{"r":["Elf"],"c":"Demon Hunter"},
+"Tiny":{"r":["Element"],"c":"Warrior"},
+"Crystal":{"r":["Human"],"c":"Mage"},
+"Beast Master":{"r":["Orc"],"c":"Hunter"},
+"Juggernaut":{"r":["Orc"],"c":"Warrior"},
+"Timbersaw":{"r":["Goblin"],"c":"Mech"},
+"Pain Queen":{"r":["Demon"],"c":"Assassin"},
+"Puck":{"r":["Elf","Dragon"],"c":"Mage"},
+"Witch Doctor":{"r":["Troll"],"c":"Warlock"},
+"Slardar":{"r":["Naga"],"c":"Warrior"},
+"Chaos Knight":{"r":["Demon"],"c":"Knight"},
+"Treant Protector":{"r":["Elf"],"c":"Druid"},
+"Morphling":{"r":["Element"],"c":"Assassin"},
+"Luna":{"r":["Elf"],"c":"Knight"},
+"Furion":{"r":["Elf"],"c":"Druid"},
+"Lycan":{"r":["Human","Beast"],"c":"Warrior"},
+"Venomancer":{"r":["Beast"],"c":"Warlock"},
+"Omni Knight":{"r":["Human"],"c":"Knight"},
+"Razor":{"r":["Element"],"c":"Mage"},
+"Wind Ranger":{"r":["Elf"],"c":"Hunter"},
+"Phantom Assassin":{"r":["Elf"],"c":"Assassin"},
+"Abaddon":{"r":["Undead"],"c":"Knight"},
+"Sand King":{"r":["Beast"],"c":"Assassin"},
+"Slark":{"r":["Naga"],"c":"Assassin"},
+"Sniper":{"r":["Dwarf"],"c":"Hunter"},
+"Terrorblade":{"r":["Demon"],"c":"Demon Hunter"},
+"Viper":{"r":["Dragon"],"c":"Assassin"},
+"Shadow Fiend":{"r":["Demon"],"c":"Warlock"},
+"Lina":{"r":["Human"],"c":"Mage"},
+"Doom":{"r":["Demon"],"c":"Warrior"},
+"Kunkka":{"r":["Human"],"c":"Warrior"},
+"Troll Warlord":{"r":["Troll"],"c":"Warrior"},
+"Light Keeper":{"r":["Human"],"c":"Mage"},
+"Necrophos":{"r":["Undead"],"c":"Warlock"},
+"Templar Assassin":{"r":["Elf"],"c":"Assassin"},
+"Alchemist":{"r":["Goblin"],"c":"Warlock"},
+"Disruptor":{"r":["Orc"],"c":"Shaman"},
+"Medusa":{"r":["Naga"],"c":"Hunter"},
+"Dragon Knight":{"r":["Human","Dragon"],"c":"Knight"},
+"Lone Druid":{"r":["Beast"],"c":"Druid"},
+"Gyrocopter":{"r":["Dwarf"],"c":"Mech"},
+"Lich":{"r":["Undead"],"c":"Mage"},
+"Tide Hunter":{"r":["Naga"],"c":"Hunter"},
+"Enigma":{"r":["Element"],"c":"Warlock"},
+"Techies":{"r":["Goblin"],"c":"Mech"}
+},
+raceArray = {
+"Orc":{"2":"Hp increased by 250 for all Orcs","4":"Hp increased by 350 for all Orcs"},
+"Beast":{"2":"Attack damage increased by 10% for all","4":"Attack damage increased by 15% for all","6":"Attack damage increased by 20% for all"},
+"Ogre":{"0":"Max hp increaed by 10%"},
+"Undead":{"2":"Armor decreased by 5 for all enemies","4":"Armor decreased by 7 for all enemies"},
+"Goblin":{"3":"Armor and Hp regend increased by 15 for a random ally","6":"Armor and Hp regend increased by 15 for all goblins"},
+"Troll":{"2":"Attack Speed increased by 30 for freindly trolls ","4":"aattack Speed icnread by 30 for all friendly"},
+"Elf":{"3":"Evasion increased by 25% for all Elfs","6":"Evasion increased by 25% for all Elfs (stacks multiplicatively)"},
+"Human":{"2":"20% change to disarm target for 3s on damage deal","4":"25% change to disarm target for 3s on damage deal","6":"30% change to disarm target for 3s on damage deal"},
+"Naga":{"2":"Magic resis increasesd by 20 for all allies","4":"Magic resis increasesd by 40 for all allies"},
+"Demon":{"0":"Deal 50% extra pure damage to its target"},
+"Dwarf":{"0":"Attack range increased by 300"},
+"Dragon":{"3":"All Dragons have 100 mana when battle starts"},
+"Element":{"2":"30% chance to turn melee attacker into stone for 3s for elementals","4":"30% chance to turn melee attacker into stone for 3s for all chesses"}
+},
+classArray = {
+"Warrior":{"3":" Armor increased by 7 for friendly warriors","6":" Armor increased by 8 for friendly warriors","9":" Armor increased by 9 for friendly warriors"},
+"Druid":{/*"2":"2 Level 1 Druids can upgrade to a Level 2 Druid","4":"2 Level 2 Druids can upgrade to a Level 3 Druid"*/},
+"Mage":{"3":" Magic resist decreased by 40 for all enemies","6":" Magic resist decreased by 40 for all enemies"},
+"Hunter":{"3":" Attack Damage increase by 25% for hunters","6":" Attack Damage increased  by 35% for hunters"},
+"Assassin":{"3":" All Assassins have 10% chance to deal 3.5x damage","6":" All Assassins have 20% chance to deal 4.5x damage"},
+"Mech":{"2":" HP regen increased by 15 for all friendly Mechs","4":" HP regen increased by 25 for all friendly Mechs"},
+"Shaman":{"2":" Hex an enemy when battle starts"},
+"Knight":{"2":" Friendly Knights have a 25% chance to get a shield","4":" Friendly Knights have a 35% chance to get a shield","6":"Friendly Knights have a 45% chance to get a shield"},
+"Demon Hunter":{"1":" Negates enemy demons' fel power","2":" All ally demons keep their power"},
+"Warlock":{"3":" Lifesteal increased by 20% for all allies","6":" Lifesteal increased by 30% for all allies"}
+};
+
+function calculateXp() {
+	var xpNow = parseInt($('#xpnow').val());
+	var xpNeeded = parseInt($('#xpneed').val());
+	if(isNaN(xpNow) || isNaN(xpNeeded) || xpNow >= xpNeeded) {
+		$('#xpout').html(''); return;
+	}
+	var buysNeeded = Math.ceil((xpNeeded-xpNow)/4);
+	var extraXp = (xpNow + buysNeeded*4) -xpNeeded ;
+	
+	$('#xpout').html(buysNeeded + '*5 = ' + buysNeeded*5 + 'g' + (extraXp > 0 ? ' (extra '+extraXp+')' : '')) ;
+}
+calculateXp();
+
+var suggestArray = [];
+$.each( unitArray, function( key, value ) {
+	suggestArray.push( key);
+});
+suggestArray.sort();
+
+$( ".classInput" ).autocomplete({
+	//source: suggestArray,
+	//source: function (request, response) { response(suggestArray); },
+	source: function (request, response) { 
+		if(suggestArray.includes(request.term))	{
+			response(suggestArray); 
+		} else {
+			response(suggestArray.filter(function(value) {return value.toLowerCase().match(new RegExp('^'+request.term.toLowerCase())) })); 
+		}
+	},
+	autoFocus: true,
+	delay: 500,
+	minLength:0,
+	change: function( event, ui ) { // Only allow suggested values
+		val = $(this).val();
+		exists = $.inArray(val,suggestArray);
+		if (exists<0) {
+			$(this).val("");
+			return false;
+		}
+	}
+}).focus(function(){ $(this).data("uiAutocomplete").search($(this).val()); }).click(function(){ $(this).data("uiAutocomplete").search($(this).val()); }); // Open autocomplete on focus
+
+
+var selectedClasses;
+function updateSelected() {	
+	// Init variables
+	selectedClasses = [],
+	selectedRaces = [];
+	$.each( raceArray, function( key, value ) {
+	  raceArray[key].count = 0;
+	  raceArray[key].nextSynergy = null;
+	  raceArray[key].currentSynergy = null;
+	});
+	$.each( classArray, function( key, value ) {
+	  classArray[key].count = 0;
+	  classArray[key].nextSynergy = null;
+	  classArray[key].currentSynergy = null;
+	});
+	
+	$('.classInput').css("background", "white");
+	// Check input
+	$('.classInput').each(function() { 
+		var foundUnit = $(this).val();
+		if(!unitArray[foundUnit]) return;
+		if(foundUnit.length > 0 && !selectedClasses.includes(foundUnit)) {
+			selectedClasses.push(foundUnit);
+			classArray[unitArray[foundUnit].c].count++; // Count class
+			$.each( unitArray[foundUnit].r, function( key, value ) { // Count race
+				raceArray[value].count++; 
+			});
+		}
+		
+		// Find duplicates
+		var otherInputs = $('.classInput').not(this),
+		duplicates = otherInputs.filter(function() { return this.value.length > 0 && this.value == foundUnit }).css("background", "#ffe6e6");
+	});
+	// Generate synergy lists
+	var output = "";
+	
+	var totalsOutput;
+	function generateSynergyAndTotalsRowOutput(title, sourceArray) {
+		var totalsOutput = '(', outPutRows = '';
+		$.each( sourceArray, function( key, value ) {
+			if(sourceArray[key].count > 0) {
+				totalsOutput += sourceArray[key].count + 'x ' + key + ', ';
+				for(var i = 0; i <=10; i++) {
+					if(sourceArray[key][i]) { // Synergy exists
+						var unitsNeeded = (i - sourceArray[key].count);
+						var unitsNeededWithSign = unitsNeeded > 0 ? '+' + unitsNeeded : unitsNeeded;
+						var rowColor = unitsNeeded > 0 ? 'gray' : unitsNeeded == 0 ? '#40d642' : '#176618';
+						var lastRow = sourceArray[key].count < i;
+						
+						var rowPrefixOutput = '&nbsp;' + (sourceArray[key].count == i || i == 0 ? '' : unitsNeededWithSign) + ' ';
+						var tmpOutPutRows = rowPrefixOutput + key + ' &#8594;' + sourceArray[key][i].replace(new RegExp('(' + key + '[als]*)', 'i'), '<u>$1</u>') +'<br>';
+						
+						outPutRows += '<span style="color:'+rowColor+'">' + tmpOutPutRows +'</span>';// 
+						
+						if(lastRow) {
+							sourceArray[key].nextSynergy = unitsNeeded;
+							break; // Only output 1 active
+						} else {
+							sourceArray[key].currentSynergy = i;
+						}
+					}
+				}
+			}
+		});
+		totalsOutput += ')';
+		
+		if(outPutRows.length) {
+			output += '<i>' +title + ' synergy '+totalsOutput.replace(/,\s\)/, ')')+':</i><br>';
+			output += outPutRows;
+		}
+	}
+	
+	generateSynergyAndTotalsRowOutput('Class', classArray);
+	generateSynergyAndTotalsRowOutput('Race', raceArray);
+
+	// Check for units not contributing
+	function generateAdjustmentSuggestionsOutput(title, sourceArray) {
+		var tmpNotContributingRows = '';
+		$.each( sourceArray, function( key, value ) {
+			if (sourceArray[key].nextSynergy != null && 
+					sourceArray[key].count > 0 && sourceArray[key].count !== sourceArray[key].currentSynergy) {
+				tmpNotContributingRows = tmpNotContributingRows == '' ? title + ' adjustments:<br>' : tmpNotContributingRows;
+				tmpNotContributingRows += '[' + key + '] -' + (sourceArray[key].count - sourceArray[key].currentSynergy) + '  or +'  + sourceArray[key].nextSynergy + '<br>';
+			}
+		});
+		if(tmpNotContributingRows.length > 0) output += tmpNotContributingRows;
+	}
+	generateAdjustmentSuggestionsOutput('Class', classArray);
+	generateAdjustmentSuggestionsOutput('Race', raceArray);	
+	
+	$('#synergyOutput').html(output);// + '<br><br>debug:<br>'+selectedClasses+'<br><br>'+JSON.stringify(raceArray)+'<br><br>'+JSON.stringify(classArray));
+	saveToUrl();
+}
+
+function loadFromUrl() {
+	try { // Try to retrieve composition from url
+		var units = window.location.href.match(/#units=(.*)$/);
+		units = units ? decodeURI(units[1]).split(',') : null ;
+		if(!units) return;
+
+		var inputs = document.querySelectorAll('.classInput');
+
+		for(var i = 0 ; i < units.length; i++) {
+			var unitName = units[i].replace(/^\d/,''), unitRank = units[i].replace(/[^\d]*/g,'');
+
+			if(unitArray[unitName]) inputs[i].value = unitName;
+			if(['1','2','3'].includes(unitRank)) $(inputs[i]).prev().html('*'.repeat(unitRank));			
+		}
+	} catch(err) {
+		console.log('Parameter problem:'+err.message)
+	}
+}
+function saveToUrl() { // Update url with composition
+	var dataToSave =  '#units=';
+	$('.classInput').each(function() { 
+		if(typeof $(this).val() !== 'undefined' ) dataToSave += $(this).prev().html().length + $(this).val() + ',';
+	});
+
+	window.location.href = window.location.href.replace(/#units=(.*)$/,'') + dataToSave.replace(/,$/,'');
+}
+
+loadFromUrl();
+// Check for changes with timer (events sometimes waits for blur)
+setInterval(function() {updateSelected();},200);
+
+</script>
+</body>
+</html>
